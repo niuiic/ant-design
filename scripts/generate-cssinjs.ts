@@ -30,13 +30,13 @@ export const generateCssinjs = ({ key, beforeRender, render }: GenCssinjsOptions
       const componentName = pathArr[styleIndex - 1];
       let useStyle: StyleFn = () => {};
       if (file.includes('grid')) {
-        const { useColStyle, useRowStyle } = await import(absPath);
+        const { useColStyle, useRowStyle } = await import(absPath).then((x) => x.default);
         useStyle = (prefixCls) => {
           useRowStyle(prefixCls);
           useColStyle(prefixCls);
         };
       } else {
-        useStyle = (await import(absPath)).default;
+        useStyle = await import(absPath).then((x) => x.default.default);
       }
       const Demo: React.FC = () => {
         useStyle(`${key}-${componentName}`);
